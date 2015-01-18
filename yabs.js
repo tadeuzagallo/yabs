@@ -2,8 +2,6 @@
 
 var semver = require('semver');
 var plist = require('plist');
-var xml = require('xml');
-var parseXML = require('xml-parser');
 var minimist = require('minimist');
 var fs = require('fs');
 var path = require('path');
@@ -70,8 +68,6 @@ function parseFile(file) {
       return JSON.parse(content);
     case '.plist':
       return plist.parse(content);
-    case '.xml':
-      return parseXML(content);
     default:
       throw new Error('File type not supported: ' + ext);
   }
@@ -83,8 +79,6 @@ function buildFile(file, data) {
       return JSON.stringify(data, null, '  ');
     case '.plist':
       return plist.build(data);
-    case '.xml':
-      return xml(data);
   }
 }
 
