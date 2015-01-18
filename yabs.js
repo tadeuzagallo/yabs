@@ -32,6 +32,10 @@ if (argv.f) {
   console.error('No file provided and no config file found');
 }
 
+function invalidVersion(version, file) {
+  throw new Error('Invalid version `' + version + '` found in `' + file + '`');
+}
+
 function bump(file, key, regex) {
   if (regex) {
     bumpRegex(file, regex);
@@ -42,13 +46,13 @@ function bump(file, key, regex) {
     if (!version) {
       throw new Error('Key `' + key + '` not found in `' + file + '`');
     } else if (!semver.valid(version)) {
-      throw new Error('Invalid version `' + version + '` found in `' + file + '`');
+      invalidVersion(version, file);
     }
 
     data[key] = semver.inc(version, type);
 
     var content = buildFile(file, data);
-    
+
     fs.writeFileSync(file, content);
   }
 }
@@ -82,4 +86,17 @@ function buildFile(file, data) {
     case '.xml':
       return xml(data);
   }
+}
+
+function bumpRegex(file, regex) {
+  var content = fs.readFileSync(file).toString();
+  var r = new RegExp(regex.replace('$version', '(\\d+\\.\\d+\\.\\d+)').slice(1, -1));
+  var c = content.replace(r, function (match, version) {
+    if (!semver.valid(version)) {
+      invalidVersion(version, file);
+    }
+
+    return match.replace(version, semver.inc(version, type));
+  });
+  fs.writeFileSync(file, c);
 }
