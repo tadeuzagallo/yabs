@@ -9,6 +9,23 @@ var path = require('path');
 var argv = minimist(process.argv.slice(2));
 var type = argv._[0] || 'patch';
 
+if (argv.h || argv.help) {
+  console.log(
+    'Usage:\n\n' +
+    '   $ yabs [type] [-f file (-k key | -r pattern) ] \n\n' +
+  'Options: \n' +
+  '\n' +
+  '      type     Type of bump: patch, minor or major\n' +
+  '   -f file     Path to the file you want to bump\n' +
+  '   -k key      Key to be bumped. (default: version)\n' +
+  '   -r pattern  Pattern to match version on arbitrary file.' +
+  '               Use $version to represent the actual version inside the pattern\n' +
+  '               e.g. r/version: $version/\n'
+  );
+
+  return;
+}
+
 if (argv.f) {
   bump(argv.f, argv.k || 'version', argv.r);
 } else if (fs.existsSync('./.yabsrc')) {
