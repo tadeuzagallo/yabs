@@ -1,6 +1,6 @@
 {
   "name": "yabs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Yet Another Bump Script",
   "main": "yabs.js",
   "bin": {
