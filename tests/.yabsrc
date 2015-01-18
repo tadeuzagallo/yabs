@@ -1,3 +1,5 @@
 {
-  "test.json": "version"
+  "test.json": "version",
+  "test.plist": "version",
+  "test.version": "r/$version/"
 }

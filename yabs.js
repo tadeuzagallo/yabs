@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 
 var argv = minimist(process.argv.slice(2));
-var type = argv.type || 'patch';
+var type = argv._[0] || 'patch';
 
 if (argv.f) {
   bump(argv.f, argv.k || 'version', argv.r);
@@ -19,7 +19,7 @@ if (argv.f) {
     var regex;
 
     if (value[0] === 'r') {
-      regex = value.slice(1);
+      regex = value;
     } else {
       key = value;
     }
@@ -83,6 +83,10 @@ function buildFile(file, data) {
 }
 
 function bumpRegex(file, regex) {
+  if (regex[0] === 'r') {
+    regex = regex.slice(1);
+  }
+
   var content = fs.readFileSync(file).toString();
   var r = new RegExp(regex.replace('$version', '(\\d+\\.\\d+\\.\\d+)').slice(1, -1));
   var c = content.replace(r, function (match, version) {
